@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("MAIN_URL")
+}
+
+model badges {
+  name        String @unique(map: "name") @db.VarChar(32)
+  image       String @db.Text
+  description String @db.Text
+}
+
+model banners {
+  name  String @id @unique(map: "name") @db.VarChar(64)
+  image String @db.Text
+}
+
+model bazaar {
+  id     Int    @id
+  item   String @db.Text
+  price  Int
+  seller Int
+  date   Int
+}
+
+model blacklists {
+  ip     String @id @db.VarChar(128)
+  reason String @db.Text
+}
+
+model blooks {
+  name                      String @id @db.VarChar(64)
+  rarity                    String @db.Text
+  price                     Int
+  chance                    Float  @db.Float
+  image                     String @db.Text
+  art                       String @db.Text
+  bazaarMinimumListingPrice Int?
+  bazaarMaximumListingPrice Int?
+}
+
+model clans {
+  id              Int     @unique(map: "id")
+  name            String  @db.VarChar(24)
+  description     String  @db.Text
+  color           String  @db.VarChar(16)
+  image           String  @db.Text
+  owner           Int
+  created         Int
+  room            Float
+  members         String  @db.LongText
+  inventory       String  @db.LongText
+  investments     String  @db.LongText
+  exp             Int     @default(0)
+  shielded        Boolean @default(false)
+  disguised       Boolean @default(false)
+  requests        String  @db.LongText
+  settings        String  @db.LongText
+  safe            Boolean @default(false)
+  safe_cooldown   Float   @default(0)
+  protected_until Float   @default(0)
+}
+
+model emojis {
+  name  String  @id @db.VarChar(64)
+  image String? @db.Text
+}
+
+model forms {
+  username String @unique(map: "username") @db.VarChar(16)
+  password String @db.Text
+  ip       String @db.Text
+  age      Int
+  discord  String @db.Text
+  body     String @db.Text
+  date     Int
+}
+
+model logs {
+  user   Int
+  action String @db.Text
+  reason String @db.Text
+  date   Float  @unique(map: "date")
+}
+
+model messages {
+  id       Float   @unique(map: "id")
+  user     Int
+  room     Float
+  content  String  @db.Text
+  mentions String  @db.LongText
+  edited   String  @db.LongText
+  deleted  Boolean
+  date     Float
+}
+
+model news {
+  title String @db.Text
+  image String @db.Text
+  body  String @db.Text
+  date  Int    @unique(map: "date")
+}
+
+model packs {
+  name    String  @id @db.VarChar(64)
+  price   Int
+  color1  String  @db.VarChar(7)
+  color2  String  @db.VarChar(7)
+  blooks  String  @db.LongText
+  image   String  @db.Text
+  enabled Boolean
+}
+
+model presets {
+  name   String @unique(map: "name") @db.VarChar(128)
+  color  String @db.VarChar(7)
+  perms  String @db.LongText
+  badges String @db.LongText
+}
+
+model purchases {
+  user    Int
+  invoice String @unique(map: "invoice") @db.VarChar(16)
+}
+
+model rarities {
+  name      String @unique(map: "name") @db.VarChar(16)
+  color     String @db.VarChar(7)
+  animation String @db.VarChar(64)
+  exp       Int
+  wait      Int
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model requests {
+  sender   Int
+  receiver Int
+
+  @@ignore
+}
+
+model rooms {
+  id    Float  @unique(map: "id")
+  name  String @db.VarChar(128)
+  users String @db.LongText
+  date  Float
+}
+
+model users {
+  id        Int     @id
+  username  String  @unique(map: "username") @db.VarChar(128)
+  password  String  @db.Text
+  created   Float
+  modified  Int     @default(0)
+  avatar    String? @db.Text
+  banner    String  @db.Text
+  badges    String  @db.LongText
+  blooks    String  @db.LongText
+  tokens    Float   @default(0)
+  perms     String  @db.LongText
+  clan      String? @db.VarChar(32)
+  role      String  @default("Common") @db.VarChar(128)
+  color     String  @default("#ffffff") @db.VarChar(128)
+  exp       Int     @default(0)
+  inventory String  @db.LongText
+  misc      String  @db.LongText
+  friends   String  @db.LongText
+  blocks    String  @db.LongText
+  ip        String  @db.Text
+  claimed   String? @db.Text
+  mute      String  @db.LongText
+  ban       String  @db.LongText
+  settings  String  @db.LongText
+  otp       String  @db.LongText
+}
+
+model weekly_shop {
+  item  String  @unique(map: "item") @db.VarChar(32)
+  price Int
+  glow  Boolean
+}
